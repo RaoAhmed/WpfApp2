@@ -1,0 +1,256 @@
+﻿<Window x:Class="WpfApp2.MainWindow2"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+        mc:Ignorable="d"
+        Title="AutoFox" Height="450" Width="800">
+    <Window.Background>
+        <LinearGradientBrush StartPoint="1,0" EndPoint="1,2">
+            <GradientStop Color="#9E7BCA" Offset="0.0" />
+            <GradientStop Color="#8053BA" Offset="0.3" />
+            <GradientStop Color="#713FB2" Offset="0.6" />
+            <GradientStop Color="#622AAA" Offset="1.0" />
+        </LinearGradientBrush>
+    </Window.Background>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="4*" />
+        </Grid.ColumnDefinitions>
+        <Border CornerRadius="25"
+                Background="White"
+                Margin="15"
+                Grid.Column="0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20*"/>
+                    <RowDefinition Height="80*"/>
+                </Grid.RowDefinitions>
+
+                <Image Grid.Row="0" Source="/Images/Auto Fox Logo.png" Width="100" />
+                <!--#region (Scripts) -->
+                <StackPanel Grid.Row="1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="2*"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <ToggleButton x:Name="CustomToggle" Width="auto" Height="40" Background="#DBBDF3" BorderBrush="Transparent" Margin="10,0,10,0" HorizontalAlignment="Stretch" IsChecked="False" Checked="CustomToggle_Checked" Unchecked="CustomToggle_Unchecked">
+                                <ToggleButton.Template>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Border Background="{TemplateBinding Background}" 
+                                            CornerRadius="10" 
+                                            BorderBrush="{TemplateBinding BorderBrush}" 
+                                            BorderThickness="0">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="1*"/>
+                                                    <ColumnDefinition Width="1*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <!-- Button Text -->
+                                                <TextBlock Grid.Column="0" Text="Scripts" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="auto" Margin="20,0,0,0"/>
+                                                <!-- Path Icon (Example: Down Arrow) -->
+                                                <Path Grid.Column="1"  Data="M 0,1.5 L 4.5,5 L 8,1.5" Width="20" Height="10" Stroke="White" StrokeThickness="2" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,5,10,0"/>
+                                            </Grid>
+                                        </Border>
+                                    </ControlTemplate>
+                                </ToggleButton.Template>
+                                <!--<ToggleButton.Content>
+                                Toggle Option
+                            </ToggleButton.Content>-->
+                            </ToggleButton>
+                        </Grid>
+                        <Border Grid.Row="1" x:Name="dropdown" Visibility="Collapsed" BorderBrush="White" BorderThickness="1" CornerRadius="0,0,5,5" Width="auto" HorizontalAlignment="Stretch" VerticalAlignment="Center" Padding="5" Margin="10,0,10,0">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="1,0" EndPoint="1,2">
+                                    <GradientStop Color="#ffffff" Offset="0.0" />
+                                    <GradientStop Color="#EDDEF9" Offset="0.3" />
+                                    <GradientStop Color="#DBBDF3" Offset="1.0" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <StackPanel Background="Transparent">
+                                <StackPanel.Resources>
+                                    <Style TargetType="RadioButton">
+                                        <Setter Property="Margin" Value="0,0,0,10" />
+                                    </Style>
+                                </StackPanel.Resources>
+                                <RadioButton x:Name="DisplayString" Checked="DisplayString_Checked" Style="{DynamicResource RadioButton1}" Content="Display String" GroupName="Scripts" />
+                                <RadioButton x:Name="ReverseShell" Checked="ReverseShell_Checked" Style="{DynamicResource RadioButton1}" Content="Reverse Shell" GroupName="Scripts" />
+                                <RadioButton x:Name="AsciiDrawing" Checked="AsciiDrawing_Checked" Style="{DynamicResource RadioButton1}" Content="ASCII Drawing" GroupName="Scripts" />
+                                <RadioButton x:Name="Video" Click="Video_Click" Style="{DynamicResource RadioButton1}" Content="Video" GroupName="Scripts" />
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                    <!--#endregion (Scripts) -->
+
+                    <!--#region (Editor)-->
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="2*"/>
+                        </Grid.RowDefinitions>
+                        <ToggleButton Grid.Row="0" Content="Editor" Style="{DynamicResource ToggleButtonStyle1}" Background="#DBBDF3" Width="auto" Height="40" Margin="10,20,10,0" Checked="Editor_Checked" Unchecked="Editor_Unchecked"/>
+                        <Border Grid.Row="1" x:Name="dropdown2" Visibility="Collapsed" BorderBrush="White" BorderThickness="1" CornerRadius="0,0,5,5" Width="auto" HorizontalAlignment="Stretch" VerticalAlignment="Center" Padding="5" Margin="10,0,10,0">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="1,0" EndPoint="1,2">
+                                    <GradientStop Color="#ffffff" Offset="0.0" />
+                                    <GradientStop Color="#EDDEF9" Offset="0.3" />
+                                    <GradientStop Color="#DBBDF3" Offset="1.0" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <StackPanel Background="Transparent">
+                                <StackPanel.Resources>
+                                    <Style TargetType="RadioButton">
+                                        <Setter Property="Margin" Value="0,0,0,10" />
+                                    </Style>
+                                </StackPanel.Resources>
+                                <Button x:Name="New" Click="New_Click" Style="{DynamicResource ButtonStyle1}" Content="New"  Background="Transparent" VerticalAlignment="Center" HorizontalContentAlignment="left" BorderThickness="0"/>
+                                <Button x:Name="Open" Click="Open_Click" Style="{DynamicResource ButtonStyle1}" Content="Open" Background="Transparent" VerticalAlignment="Center" HorizontalContentAlignment="left" BorderThickness="0"/>
+                                <Button x:Name="SaveAs" Click="SaveAs_Click" Style="{DynamicResource ButtonStyle1}" Content="SaveAs" Background="Transparent" VerticalAlignment="Center" HorizontalContentAlignment="left" BorderThickness="0" />
+                                <!--<RadioButton Content="Open" GroupName="Editor" Background="#D9D9D9" BorderBrush="Transparent"/>
+                                <RadioButton Content="New" GroupName="Editor" Background="#D9D9D9" BorderBrush="Transparent"/>
+                                <RadioButton Content="Save" GroupName="Editor" Background="#D9D9D9" BorderBrush="Transparent"/>-->
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                    <!--#endregion (Editor)-->
+
+                    <!--#region (To Base64)-->
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="2*"/>
+                        </Grid.RowDefinitions>
+                        <ToggleButton Grid.Row="0" Content="To Base64" Style="{DynamicResource ToggleButtonStyle1}" Background="#DBBDF3" Width="auto" Height="40" Margin="10,20,10,0" Checked="Base64_Checked" Unchecked="Base64_UnChecked"/>
+                        <Border Grid.Row="1" x:Name="dropdown3" Visibility="Collapsed" BorderBrush="White" BorderThickness="1" CornerRadius="0,0,5,5" Width="auto" HorizontalAlignment="Stretch" VerticalAlignment="Center" Padding="5" Margin="10,0,10,0">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="1,0" EndPoint="1,2">
+                                    <GradientStop Color="#ffffff" Offset="0.0" />
+                                    <GradientStop Color="#EDDEF9" Offset="0.3" />
+                                    <GradientStop Color="#DBBDF3" Offset="1.0" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <StackPanel Background="Transparent">
+                                <StackPanel.Resources>
+                                    <Style TargetType="RadioButton">
+                                        <Setter Property="Margin" Value="0,0,0,10" />
+                                    </Style>
+                                </StackPanel.Resources>
+                                <RadioButton Content="Open" GroupName="To Base64" Background="#D9D9D9" BorderBrush="Transparent"/>
+                                <RadioButton Content="Save" GroupName="To Base64" Background="#D9D9D9" BorderBrush="Transparent"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                    <!--#endregion (To Base64)-->
+                </StackPanel>
+            </Grid>
+        </Border>
+        
+        <Grid Grid.Column="1" Background="Transparent" Margin="0 15 15 15">
+
+            <Grid.RowDefinitions>
+                <!--<RowDefinition Height="2*"/>-->
+                <RowDefinition Height="60*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="38*"/>
+                <!--<RowDefinition Height="2*"/>-->
+            </Grid.RowDefinitions>
+            <!--<Border Grid.Row="0" CornerRadius="25,25,0,0" Background="White">
+            </Border>-->
+            <!--<Border Grid.Row="2" CornerRadius="0,0,25,25" Background="White"/>-->
+            <Border x:Name="mainBorder" CornerRadius="25" Grid.Row="0" Background="White">
+                <!--<ContentControl x:Name="ContentControl" />-->
+                <Grid x:Name="GridRoot">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="80*"/>
+                        <RowDefinition Height="20*"/>
+                    </Grid.RowDefinitions>
+                    <Grid x:Name="main_logic_grid" Grid.Row="0">
+                        <Border CornerRadius="5" Background="#DBBDF3">
+                            <avalonEdit:TextEditor Name="CodeEditor"
+                            ShowLineNumbers="True"
+                            SyntaxHighlighting="C++"
+                            FontFamily="Consolas"
+                            FontSize="13"
+                            Padding="2"
+                            Foreground="Black"
+                            HorizontalScrollBarVisibility="Auto"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            VerticalScrollBarVisibility="Auto"
+                            Margin="7"/>
+                        </Border>
+                    </Grid>
+
+                    <StackPanel x:Name="button_logic_stack" Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center">
+                        <Button x:Name="Compile" MinWidth="100"
+                                Click="Compile_Click" Content="Compile" Margin="10"/>
+                        <Button x:Name="Upload" MinWidth="100" Margin="10"
+                                Click="Upload_Click" Content="Upload" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!--<Border Background="#622AAA" Grid.Row="2"/>-->
+            <Grid 
+                Background="Transparent"
+                Grid.Row="2">
+                <!--<Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="3*"/>
+                        <RowDefinition Height="7*"/>
+                    </Grid.RowDefinitions>
+                    <DockPanel Background="AliceBlue">
+                        
+                    
+                    <ToggleButton DockPanel.Dock="Top"
+                                  Style="{DynamicResource ToggleButtonStyle1}"
+                                  Content="Output"
+                                  Width="auto"
+                                  Height="30"
+                                  VerticalAlignment="Stretch"
+                                  Background="#DBBDF3"
+                                  IsChecked="{x:Null}"
+                                  Margin="0"/>
+                    <Border DockPanel.Dock="Bottom"
+                            Width="auto"
+                            VerticalAlignment="Stretch"
+                            Background="white"
+                            Margin="0"
+                            Height="80">
+                        <TextBlock Text="hello"/>
+                    </Border>
+                    </DockPanel>
+                </Grid>-->
+                <Expander Style="{DynamicResource ExpanderStyle1}" Grid.Row="3"
+                      Header="Output"
+                      Background="#ffffff"
+                      Padding="10"
+                      VerticalAlignment="Top"
+                      Expanded="Expander_click_Expanded"
+                      Collapsed="Expander_click_Collapsed"
+                      x:Name="Expander_click">
+
+                    <Border Padding="5">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="5,0" VerticalContentAlignment="Center" Cursor="Hand">
+                            <TextBlock x:Name="Output_Window"
+                                   TextWrapping="Wrap"
+                                   FontSize="14"
+                                   Foreground="Black"
+                                       Padding="20">
+                                What is Lorem Ipsum?
+                                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                            
+                                Where does it come from?
+                                Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
+                            </TextBlock>
+                        </ScrollViewer>
+                    </Border>
+                </Expander>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
