@@ -20,9 +20,20 @@ namespace WpfApp2.CustomControls
     /// </summary>
     public partial class MainLogicGrid : UserControl
     {
+        //private MainWindow2 mainWindow2;
         public MainLogicGrid()
         {
             InitializeComponent();
+        }
+        public event EventHandler compileBtnClick;
+        private void btnCompile_Click(object sender, RoutedEventArgs e)
+        {
+            compileBtnClick?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void btnUpload_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

@@ -75,6 +75,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Classes\ArduinoHandler.cs" />
+    <Compile Include="Classes\AsciiArt.cs" />
+    <Compile Include="Classes\DisplayString.cs" />
+    <Compile Include="Classes\PlayVideo.cs" />
+    <Compile Include="Classes\ReverseShell.cs" />
     <Compile Include="CustomControls\ForBase64.xaml.cs">
       <DependentUpon>ForBase64.xaml</DependentUpon>
     </Compile>

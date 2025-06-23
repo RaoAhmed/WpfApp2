@@ -38,7 +38,7 @@
                             <RowDefinition Height="2*"/>
                         </Grid.RowDefinitions>
                         <Grid Grid.Row="0">
-                            <ToggleButton x:Name="CustomToggle" Width="auto" Height="40" Background="#DBBDF3" BorderBrush="Transparent" Margin="10,0,10,0" HorizontalAlignment="Stretch" IsChecked="False" Checked="CustomToggle_Checked" Unchecked="CustomToggle_Unchecked">
+                            <ToggleButton x:Name="Scripts" Width="auto" Height="40" Background="#DBBDF3" BorderBrush="Transparent" Margin="10,0,10,0" HorizontalAlignment="Stretch" IsChecked="False" Checked="Scripts_Checked" Unchecked="Scripts_Unchecked">
                                 <ToggleButton.Template>
                                     <ControlTemplate TargetType="ToggleButton">
                                         <Border Background="{TemplateBinding Background}" 
@@ -92,7 +92,7 @@
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="2*"/>
                         </Grid.RowDefinitions>
-                        <ToggleButton Grid.Row="0" Content="Editor" Style="{DynamicResource ToggleButtonStyle1}" Background="#DBBDF3" Width="auto" Height="40" Margin="10,20,10,0" Checked="Editor_Checked" Unchecked="Editor_Unchecked"/>
+                        <ToggleButton x:Name="Editor" Grid.Row="0" Content="Editor" Style="{DynamicResource ToggleButtonStyle1}" Background="#DBBDF3" Width="auto" Height="40" Margin="10,20,10,0" Checked="Editor_Checked" Unchecked="Editor_Unchecked"/>
                         <Border Grid.Row="1" x:Name="dropdown2" Visibility="Collapsed" BorderBrush="White" BorderThickness="1" CornerRadius="0,0,5,5" Width="auto" HorizontalAlignment="Stretch" VerticalAlignment="Center" Padding="5" Margin="10,0,10,0">
                             <Border.Background>
                                 <LinearGradientBrush StartPoint="1,0" EndPoint="1,2">
@@ -125,6 +125,9 @@
                             <RowDefinition Height="2*"/>
                         </Grid.RowDefinitions>
                         <ToggleButton Grid.Row="0" Content="To Base64" Style="{DynamicResource ToggleButtonStyle1}" Background="#DBBDF3" Width="auto" Height="40" Margin="10,20,10,0" Checked="Base64_Checked" Unchecked="Base64_UnChecked"/>
+                        <!--<Button Content="To Base64" Style="{DynamicResource ButtonStyle2}" Background="#DBBDF3" Width="auto" Height="40" Margin="10,20,10,0">
+                            
+                        </Button>-->
                         <Border Grid.Row="1" x:Name="dropdown3" Visibility="Collapsed" BorderBrush="White" BorderThickness="1" CornerRadius="0,0,5,5" Width="auto" HorizontalAlignment="Stretch" VerticalAlignment="Center" Padding="5" Margin="10,0,10,0">
                             <Border.Background>
                                 <LinearGradientBrush StartPoint="1,0" EndPoint="1,2">
@@ -133,7 +136,7 @@
                                     <GradientStop Color="#DBBDF3" Offset="1.0" />
                                 </LinearGradientBrush>
                             </Border.Background>
-                            <StackPanel Background="Transparent">
+                            <!--<StackPanel Background="Transparent">
                                 <StackPanel.Resources>
                                     <Style TargetType="RadioButton">
                                         <Setter Property="Margin" Value="0,0,0,10" />
@@ -141,7 +144,7 @@
                                 </StackPanel.Resources>
                                 <RadioButton Content="Open" GroupName="To Base64" Background="#D9D9D9" BorderBrush="Transparent"/>
                                 <RadioButton Content="Save" GroupName="To Base64" Background="#D9D9D9" BorderBrush="Transparent"/>
-                            </StackPanel>
+                            </StackPanel>-->
                         </Border>
                     </Grid>
                     <!--#endregion (To Base64)-->
@@ -158,73 +161,14 @@
                 <RowDefinition Height="38*"/>
                 <!--<RowDefinition Height="2*"/>-->
             </Grid.RowDefinitions>
-            <!--<Border Grid.Row="0" CornerRadius="25,25,0,0" Background="White">
-            </Border>-->
-            <!--<Border Grid.Row="2" CornerRadius="0,0,25,25" Background="White"/>-->
-            <Border x:Name="mainBorder" CornerRadius="25" Grid.Row="0" Background="White">
-                <!--<ContentControl x:Name="ContentControl" />-->
-                <Grid x:Name="GridRoot">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="80*"/>
-                        <RowDefinition Height="20*"/>
-                    </Grid.RowDefinitions>
-                    <Grid x:Name="main_logic_grid" Grid.Row="0">
-                        <Border CornerRadius="5" Background="#DBBDF3">
-                            <avalonEdit:TextEditor Name="CodeEditor"
-                            ShowLineNumbers="True"
-                            SyntaxHighlighting="C++"
-                            FontFamily="Consolas"
-                            FontSize="13"
-                            Padding="2"
-                            Foreground="Black"
-                            HorizontalScrollBarVisibility="Auto"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch"
-                            VerticalScrollBarVisibility="Auto"
-                            Margin="7"/>
-                        </Border>
-                    </Grid>
 
-                    <StackPanel x:Name="button_logic_stack" Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center">
-                        <Button x:Name="Compile" MinWidth="100"
-                                Click="Compile_Click" Content="Compile" Margin="10"/>
-                        <Button x:Name="Upload" MinWidth="100" Margin="10"
-                                Click="Upload_Click" Content="Upload" />
-                    </StackPanel>
-                </Grid>
+            <Border x:Name="mainBorder" CornerRadius="25" Grid.Row="0" Background="White">
+                <ContentControl x:Name="ContentControl" />
             </Border>
 
-            <!--<Border Background="#622AAA" Grid.Row="2"/>-->
             <Grid 
                 Background="Transparent"
                 Grid.Row="2">
-                <!--<Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="3*"/>
-                        <RowDefinition Height="7*"/>
-                    </Grid.RowDefinitions>
-                    <DockPanel Background="AliceBlue">
-                        
-                    
-                    <ToggleButton DockPanel.Dock="Top"
-                                  Style="{DynamicResource ToggleButtonStyle1}"
-                                  Content="Output"
-                                  Width="auto"
-                                  Height="30"
-                                  VerticalAlignment="Stretch"
-                                  Background="#DBBDF3"
-                                  IsChecked="{x:Null}"
-                                  Margin="0"/>
-                    <Border DockPanel.Dock="Bottom"
-                            Width="auto"
-                            VerticalAlignment="Stretch"
-                            Background="white"
-                            Margin="0"
-                            Height="80">
-                        <TextBlock Text="hello"/>
-                    </Border>
-                    </DockPanel>
-                </Grid>-->
                 <Expander Style="{DynamicResource ExpanderStyle1}" Grid.Row="3"
                       Header="Output"
                       Background="#ffffff"

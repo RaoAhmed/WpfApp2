@@ -7,17 +7,19 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Border Background="#DBBDF3" CornerRadius="25">
-        <Grid Background="#D9D9D9"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="30">
+        <Grid Background="#FFFFFF"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="20" 
+              AllowDrop="True"
+              DragEnter="main_logic_grid_DragEnter"
+              Drop="main_logic_grid_Drop">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
-                <!--<RowDefinition Height="*"/>-->
             </Grid.RowDefinitions>
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Label Content="Please Drag n Drop a file to open" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="20" />
+            <Label x:Name="fileLable" Content="Please Drag n Drop a file to open" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="20" />
                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal" Margin="20">
-                    <Button x:Name="Open" MinWidth="100"
+                    <Button Style="{DynamicResource ButtonStyle2}" x:Name="Open" MinWidth="100"
                 Click="Open_Click" Content="Open" Margin="10"/>
-                    <Button x:Name="Save" MinWidth="100" Margin="10"
+                    <Button x:Name="btnSave" Style="{DynamicResource ButtonStyle2}" IsEnabled="False" MinWidth="100" Margin="10"
                 Click="Save_Click" Content="Save As" />
                 </StackPanel>
             </StackPanel>

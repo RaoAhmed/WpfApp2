@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -8,12 +9,15 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+//using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using AutoFox;
 using ICSharpCode.AvalonEdit;
 using Microsoft.Win32;
+using WpfApp2.Classes;
 using WpfApp2.CustomControls;
 
 namespace WpfApp2
@@ -24,14 +28,16 @@ namespace WpfApp2
     public partial class MainWindow2 : Window
     {
         private TextEditor codeEditor;
-        private ContentControl contentControl;
+        //private ContentControl contentControl;
         private MainLogicGrid mainLogic = new MainLogicGrid();
         private ForBase64 base64 = new ForBase64();
+        private TextBox textbox_String, textbox_LHOST, textbox_LPORT, textbox_Ascii, textbox_URL;
         public MainWindow2()
         {
             InitializeComponent();
-            //ContentControl.Content = mainLogic;
-            main_logic_grid.Children.Clear();
+            ContentControl.Content = mainLogic;
+            mainLogic.main_logic_grid.Children.Clear();
+            mainLogic.compileBtnClick += MainLogic_compileBtnClick;
         }
 
         // PlaceHolder Code For TextBox.
@@ -81,15 +87,85 @@ namespace WpfApp2
             }
         }
 
+        private void MainLogic_compileBtnClick(object sender, EventArgs e)
+        {
+
+            string message="";
+            ArduinoHandler arduinoHandler = new ArduinoHandler();
+            if (DisplayString.IsChecked == true)
+            {
+                DisplayString displayString = new DisplayString(textbox_String.Text);
+                message = displayString.DisplayStringSketch();
+            }
+            else if (ReverseShell.IsChecked == true)
+            {
+                //Output_Window.Text = textbox_LHOST.Text + "\n\r" + textbox_LPORT.Text;
+                ReverseShell reverseShell = new ReverseShell(textbox_LHOST.Text, textbox_LPORT.Text);
+                message = reverseShell.ReverseShellSketch();
+            }
+            else if (AsciiDrawing.IsChecked == true)
+            {
+                //Output_Window.Text = textbox_Ascii.Text;
+                AsciiArt asciiArt = new AsciiArt(textbox_Ascii.Text);
+                message = asciiArt.AsciiArtSketch();
+            }
+            else if (Video.IsChecked == true)
+            {
+                //Output_Window.Text = textbox_URL.Text;
+                PlayVideo playVideo = new PlayVideo(textbox_URL.Text);
+                message = playVideo.PlayVideoSketch();
+            }
+            else if (Editor.IsChecked == true)
+            {
+                Output_Window.Text = codeEditor.Text;
+                string Path = "test";
+                try
+                {
+                    if (!Directory.Exists(Path))
+                    {
+                        Directory.CreateDirectory(Path);
+                    }
+                    File.WriteAllText(@"test\test.ino", codeEditor.Text);
+                }
+                catch (Exception ex)
+                {
+                    Output_Window.Text = $"Failed SuccessFully 😁: {ex}";
+                }
+
+            }
+            Output_Window.Text = message;
+            message = arduinoHandler.CompileSketch();
+            Output_Window.Text = message;
+            //switch (selectedIndex)
+            //{
+            //    case 0:
+            //        DisplayString displayString = new DisplayString(data[0]);
+            //        message = displayString.DisplayStringSketch();
+            //        break;
+            //    case 1:
+            //        ReverseShell reverseShell = new ReverseShell(data[0], data[1]);
+            //        message = reverseShell.ReverseShellSketch();
+            //        break;
+            //    case 2:
+            //        AsciiArt asciiArt = new AsciiArt(data[0]);
+            //        message = asciiArt.AsciiArtSketch();
+            //        break;
+            //    case 3:
+            //        PlayVideo playVideo = new PlayVideo(data[0]);
+            //        message = playVideo.PlayVideoSketch();
+            //        break;
+            //}
+            message = arduinoHandler.CompileSketch();
+        }
+
 
         private void DisplayString_Checked(object sender, RoutedEventArgs e)
         {
-            main_logic_grid.Children.Clear();
+            mainLogic.main_logic_grid.Children.Clear();
 
             StackPanel stackPanel = new StackPanel
             {
                 Orientation = Orientation.Horizontal,
-                //Background = Brushes.Green,
             };
 
             Label displayString = new Label
@@ -113,8 +189,9 @@ namespace WpfApp2
                 Padding = new Thickness(10)
             };
 
-            TextBox textbox_String = new TextBox
+            textbox_String = new TextBox
             {
+                Name = "tb_DisplayString",
                 FontSize = 15,
                 FontFamily = new FontFamily("Inter"),
                 HorizontalAlignment = HorizontalAlignment.Stretch,
@@ -127,14 +204,14 @@ namespace WpfApp2
             border.Child = textbox_String;
             stackPanel.Children.Add(displayString);
             stackPanel.Children.Add(border);
-            main_logic_grid.Children.Add(stackPanel);
-            main_logic_grid.HorizontalAlignment = HorizontalAlignment.Center;
-            main_logic_grid.VerticalAlignment = VerticalAlignment.Center;
+            mainLogic.main_logic_grid.Children.Add(stackPanel);
+            mainLogic.main_logic_grid.HorizontalAlignment = HorizontalAlignment.Center;
+            mainLogic.main_logic_grid.VerticalAlignment = VerticalAlignment.Center;
         }
 
         private void ReverseShell_Checked(object sender, RoutedEventArgs e)
         {
-            main_logic_grid.Children.Clear();
+            mainLogic.main_logic_grid.Children.Clear();
 
             StackPanel stackPanel1 = new StackPanel
             {
@@ -170,7 +247,7 @@ namespace WpfApp2
                 Margin = new Thickness(0, 0, 50, 0),
             };
 
-            TextBox textbox_LHOST = new TextBox
+            textbox_LHOST = new TextBox
             {
                 FontSize = 15,
                 FontFamily = new FontFamily("Inter"),
@@ -181,7 +258,7 @@ namespace WpfApp2
                 BorderThickness = new Thickness(0),
             };
 
-            TextBox textbox_LPORT = new TextBox
+            textbox_LPORT = new TextBox
             {
                 FontSize = 15,
                 FontFamily = new FontFamily("Inter"),
@@ -231,15 +308,15 @@ namespace WpfApp2
 
             stackPanel3.Children.Add(stackPanel1);
             stackPanel3.Children.Add(stackPanel2);
-
-            main_logic_grid.Children.Add(stackPanel3);
-            main_logic_grid.HorizontalAlignment = HorizontalAlignment.Center;
-            main_logic_grid.VerticalAlignment = VerticalAlignment.Center;
+            
+            mainLogic.main_logic_grid.Children.Add(stackPanel3);
+            mainLogic.main_logic_grid.HorizontalAlignment = HorizontalAlignment.Center;
+            mainLogic.main_logic_grid.VerticalAlignment = VerticalAlignment.Center;
         }
 
         private void AsciiDrawing_Checked(object sender, RoutedEventArgs e)
         {
-            main_logic_grid.Children.Clear();
+            mainLogic.main_logic_grid.Children.Clear();
 
             StackPanel stackPanel = new StackPanel
             {
@@ -270,7 +347,7 @@ namespace WpfApp2
                 VerticalAlignment = VerticalAlignment.Stretch,
             };
 
-            TextBox textbox = new TextBox
+            textbox_Ascii = new TextBox
             {
                 FontSize = 15,
                 FontFamily = new FontFamily("Inter"),
@@ -285,23 +362,22 @@ namespace WpfApp2
                 AcceptsReturn = true,
             };
 
-            TextBoxHelper.SetPlaceholder(textbox, "Enter ASCII Drawing"); // adding the place holder
-            border.Child = textbox;
+            TextBoxHelper.SetPlaceholder(textbox_Ascii, "Enter ASCII Drawing"); // adding the place holder
+            border.Child = textbox_Ascii;
             //stackPanel.Children.Add(displayString);
             //stackPanel.Children.Add(border);
-            main_logic_grid.Children.Add(border);
-            main_logic_grid.HorizontalAlignment = HorizontalAlignment.Stretch;
-            main_logic_grid.VerticalAlignment = VerticalAlignment.Stretch;
+            mainLogic.main_logic_grid.Children.Add(border);
+            mainLogic.main_logic_grid.HorizontalAlignment = HorizontalAlignment.Stretch;
+            mainLogic.main_logic_grid.VerticalAlignment = VerticalAlignment.Stretch;
         }
 
         private void Video_Click(object sender, RoutedEventArgs e)
         {
-            main_logic_grid.Children.Clear();
+            mainLogic.main_logic_grid.Children.Clear();
 
             StackPanel stackPanel = new StackPanel
             {
                 Orientation = Orientation.Horizontal,
-                //Background = Brushes.Green,
             };
 
             Label URL = new Label
@@ -325,7 +401,7 @@ namespace WpfApp2
                 Padding = new Thickness(10)
             };
 
-            TextBox textbox_URL = new TextBox
+            textbox_URL = new TextBox
             {
                 FontSize = 15,
                 FontFamily = new FontFamily("Inter"),
@@ -339,51 +415,52 @@ namespace WpfApp2
             border.Child = textbox_URL;
             stackPanel.Children.Add(URL);
             stackPanel.Children.Add(border);
-            main_logic_grid.Children.Add(stackPanel);
-            main_logic_grid.HorizontalAlignment = HorizontalAlignment.Center;
-            main_logic_grid.VerticalAlignment = VerticalAlignment.Center;
+            mainLogic.main_logic_grid.Children.Add(stackPanel);
+            mainLogic.main_logic_grid.HorizontalAlignment = HorizontalAlignment.Center;
+            mainLogic.main_logic_grid.VerticalAlignment = VerticalAlignment.Center;
         }
 
-        private void Compile_Click(object sender, RoutedEventArgs e)
-        {
-            //int selectedIndex = ScriptsComboBox.SelectedIndex;
-            //string message;
-            int i = 0;
-            string[] data = new string[2];
-            StackPanel stackPanel = (StackPanel)main_logic_grid.Children[0];
-            foreach (StackPanel item in stackPanel.Children)
-            {
-                foreach (UIElement elem in item.Children)
-                {
-                    if (elem is TextBox)
-                    {
-                        string value = ((TextBox)elem).Text;
-                        data[i++] = value;
-                        //MessageBox.Show
-                    }
-                }
-            }
-        }
-        private void Upload_Click(object sender, RoutedEventArgs e)
-        {
-            //int selectedIndex = ScriptsComboBox.SelectedIndex;
-            //string message;
-            int i = 0;
-            string[] data = new string[2];
-            StackPanel stackPanel = (StackPanel)main_logic_grid.Children[0];
-            foreach (StackPanel item in stackPanel.Children)
-            {
-                foreach (UIElement elem in item.Children)
-                {
-                    if (elem is TextBox)
-                    {
-                        string value = ((TextBox)elem).Text;
-                        data[i++] = value;
-                    }
-                }
+        //private void Compile_Click(object sender, RoutedEventArgs e)
+        //{
+        //    //int selectedIndex = ScriptsComboBox.SelectedIndex;
+        //    //string message;
+        //    int i = 0;
+        //    string[] data = new string[2];
+        //    StackPanel stackPanel = (StackPanel)mainLogic.main_logic_grid.Children[0];
+        //    foreach (StackPanel item in stackPanel.Children)
+        //    {
+        //        foreach (UIElement elem in item.Children)
+        //        {
+        //            if (elem is TextBox)
+        //            {
+        //                string value = ((TextBox)elem).Text;
+        //                data[i++] = value;
+        //                //MessageBox.Show
+        //            }
+        //        }
+        //    }
+        //}
 
-            }
-        }
+        //private void Upload_Click(object sender, RoutedEventArgs e)
+        //{
+        //    //int selectedIndex = ScriptsComboBox.SelectedIndex;
+        //    //string message;
+        //    int i = 0;
+        //    string[] data = new string[2];
+        //    StackPanel stackPanel = (StackPanel)mainLogic.main_logic_grid.Children[0];
+        //    foreach (StackPanel item in stackPanel.Children)
+        //    {
+        //        foreach (UIElement elem in item.Children)
+        //        {
+        //            if (elem is TextBox)
+        //            {
+        //                string value = ((TextBox)elem).Text;
+        //                data[i++] = value;
+        //            }
+        //        }
+
+        //    }
+        //}
         private void Expander_click_Collapsed(object sender, RoutedEventArgs e)
         {
             Expander expander = sender as Expander;
@@ -409,23 +486,25 @@ namespace WpfApp2
             }
         }
 
-        private void CustomToggle_Checked(object sender, RoutedEventArgs e)
+        private void Scripts_Checked(object sender, RoutedEventArgs e)
         {
-            mainBorder.Child = null;
-            mainBorder.Child = main_logic_grid;
+            ContentControl.Content = mainLogic;
             dropdown.Visibility = Visibility.Visible;
+            Editor.IsChecked = false;
         }
 
-        private void CustomToggle_Unchecked(object sender, RoutedEventArgs e)
+        private void Scripts_Unchecked(object sender, RoutedEventArgs e)
         {
             dropdown.Visibility = Visibility.Collapsed;
         }
 
         private void Editor_Checked(object sender, RoutedEventArgs e)
         {
-            main_logic_grid.Children.Clear();
-
+            ContentControl.Content = mainLogic;
+            mainLogic.main_logic_grid.Children.Clear();
             dropdown2.Visibility = Visibility.Visible;
+            Scripts.IsChecked = false;
+            DisplayString.IsChecked = ReverseShell.IsChecked = Video.IsChecked = AsciiDrawing.IsChecked = false;
 
             codeEditor = new TextEditor
             {
@@ -435,7 +514,7 @@ namespace WpfApp2
                 WordWrap = true,
                 FontFamily = new FontFamily("Consolas"),
                 FontSize = 13,
-                Padding = new Thickness(2),
+                Padding = new Thickness(4),
                 Foreground = Brushes.Black,
                 HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
                 VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
@@ -453,73 +532,14 @@ namespace WpfApp2
                 VerticalAlignment = VerticalAlignment.Stretch,
             };
 
-            main_logic_grid.Children.Add(border);
-            main_logic_grid.HorizontalAlignment = HorizontalAlignment.Stretch;
-            main_logic_grid.VerticalAlignment = VerticalAlignment.Stretch;
+            mainLogic.main_logic_grid.Children.Add(border);
+            mainLogic.main_logic_grid.HorizontalAlignment = HorizontalAlignment.Stretch;
+            mainLogic.main_logic_grid.VerticalAlignment = VerticalAlignment.Stretch;
         }
 
         private void Editor_Unchecked(object sender, RoutedEventArgs e)
         {
             dropdown2.Visibility = Visibility.Collapsed;
-        }
-
-        private void Base64_Checked(object sender, RoutedEventArgs e)
-        {
-            main_logic_grid.Children.Clear();
-
-            contentControl = new ContentControl();
-            mainBorder.Child= contentControl;
-            contentControl.Content = base64;
-
-            Button btnOpen = new Button
-            {
-                //Name = "btnOpen",
-                Content = "Open",
-                MinWidth = 100,
-                MaxHeight = 40,
-                //MinHeight = 40,
-                Margin = new Thickness(10),
-            };
-
-            Button btnSave = new Button
-            {
-                //Name = "btnOpen",
-                Content = "Save",
-                MinWidth = 100,
-                MaxHeight = 40,
-                IsEnabled = false,
-                Margin = new Thickness(10),
-            };
-
-            Border border = new Border
-            {
-                CornerRadius = new CornerRadius(5),
-                Background = new SolidColorBrush(Color.FromRgb(219, 189, 243)),
-                Child = codeEditor,
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-                VerticalAlignment = VerticalAlignment.Stretch,
-            };
-
-            //border.Child = btnOpen;
-            //border.Child = btnSave;
-            //main_logic_grid.Children.Add(border);
-
-            //button_logic_stack.Children.Add(btnOpen);
-            //button_logic_stack.Children.Add(btnSave);
-
-            //btnOpen.Click += BtnOpen_Click;
-            dropdown3.Visibility = Visibility.Visible;
-
-        }
-
-        private void BtnOpen_Click(object sender, RoutedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void Base64_UnChecked(object sender, RoutedEventArgs e)
-        {
-            dropdown3.Visibility = Visibility.Collapsed;
         }
 
         private void New_Click(object sender, RoutedEventArgs e)
@@ -563,6 +583,23 @@ namespace WpfApp2
                 string filePath = saveFileDialog.FileName;
                 File.WriteAllText(filePath, codeEditor.Text);
             }
+        }
+
+
+        private void Base64_Checked(object sender, RoutedEventArgs e)
+        {
+            ContentControl.Content = base64;
+            //dropdown3.Visibility = Visibility.Visible;
+        }
+
+        private void BtnOpen_Click(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void Base64_UnChecked(object sender, RoutedEventArgs e)
+        {
+            dropdown3.Visibility = Visibility.Collapsed;
         }
     }
 }
