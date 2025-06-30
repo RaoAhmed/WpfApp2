@@ -25,7 +25,7 @@ namespace WpfApp2.CustomControls
         {
             InitializeComponent();
         }
-        public event EventHandler compileBtnClick;
+        public event EventHandler compileBtnClick, uploadBtnClick;
         private void btnCompile_Click(object sender, RoutedEventArgs e)
         {
             compileBtnClick?.Invoke(this, EventArgs.Empty);
@@ -33,7 +33,7 @@ namespace WpfApp2.CustomControls
 
         private void btnUpload_Click(object sender, RoutedEventArgs e)
         {
-
+            uploadBtnClick?.Invoke(this, EventArgs.Empty);
         }
     }
 }

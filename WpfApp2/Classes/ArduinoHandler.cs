@@ -32,10 +32,19 @@ namespace WpfApp2.Classes
         
         public string[] DisplayPorts()
         {
-            foreach (string port in ports)
-                Console.WriteLine(port);
+            //foreach (string port in ports)
+            //    Console.WriteLine(port);
             return ports;
         }
+
+        public bool IsboardConnected()
+        {
+            if (ports.Length > 0)
+            {
+                return true;
+            }
+            return false;
+        }   
 
         public string CompileSketch()
         {
@@ -46,7 +55,7 @@ namespace WpfApp2.Classes
         public string UploadSketch()
         {
             //MessageBox.Show(ComPort);
-            RunCMD(command_compile);
+            //RunCMD(command_compile);
             result = RunCMD(command_upload);
             return result;
         }

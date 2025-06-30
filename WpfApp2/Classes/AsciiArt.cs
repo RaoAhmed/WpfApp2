@@ -37,14 +37,15 @@ namespace WpfApp2.Classes
                 string sketch = "#include \"Keyboard.h\"\r\n\r\n" +
                     "void setup()\r\n" +
                     "{" +
-                    "   String powershellCommand =R\"(powershell $path=\"$env:tmp\"; ni $path\\test.exe -Force > $null; for($i=3;$i;$i--){$sc=(New-Object -ComObject WScript.Shell).CreateShortcut(\\\"$env:USERPROFILE\\\\Desktop\\\\test$i.lnk\\\");$sc.TargetPath=\\\"$path\\test.exe\\\";$sc.Save();} notepad;)\";" +
+                    //"   String powershellCommand =R\"(powershell $path=\"$env:tmp\"; ni $path\\test.exe -Force > $null; for($i=3;$i;$i--){$sc=(New-Object -ComObject WScript.Shell).CreateShortcut(\\\"$env:USERPROFILE\\\\Desktop\\\\test$i.lnk\\\");$sc.TargetPath=\\\"$path\\test.exe\\\";$sc.Save();} notepad;)\";" +
                     "   delay (1000);\r\n" +
                     "   Keyboard.begin();\r\n\r\n" +
                     "   Keyboard.press(KEY_LEFT_GUI);\r\n" +
                     "   Keyboard.press('r');\r\n" +
                     "   Keyboard.releaseAll();\r\n" +
                     "   delay(500);\r\n" +
-                    "   Keyboard.println(powershellCommand);\r\n" +
+                    //"   Keyboard.println(powershellCommand);\r\n" +
+                    "   Keyboard.println(\"notepad\");\r\n" +
                     "   delay(3000);\r\n" +
                     "   Keyboard.press(KEY_LEFT_ALT);\r\n" +
                     "   Keyboard.press(' ');\r\n" +
@@ -56,8 +57,9 @@ namespace WpfApp2.Classes
                     "       Keyboard.press(KEY_LEFT_CTRL);\r\n" +
                     "       Keyboard.press(KEY_KP_MINUS);\r\n" +
                     "       Keyboard.releaseAll();\r\n}" +
-                    $"   Keyboard.println(F(R\"({Ascii})\");\r\n" +
+                    $"   Keyboard.println(F(R\"({Ascii})\"));\r\n" +
                     "   Keyboard.end();\r\n" +
+                    "}" +
                     "   void loop() {}";
                 File.WriteAllText(@"test\test.ino", sketch);
                 //return "Here is your Ascii Art 😍\r\n" +

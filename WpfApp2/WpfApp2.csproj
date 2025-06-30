@@ -67,6 +67,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="LoadingDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -77,14 +81,19 @@
     </Compile>
     <Compile Include="Classes\ArduinoHandler.cs" />
     <Compile Include="Classes\AsciiArt.cs" />
+    <Compile Include="Classes\DataExfiltration.cs" />
     <Compile Include="Classes\DisplayString.cs" />
     <Compile Include="Classes\PlayVideo.cs" />
     <Compile Include="Classes\ReverseShell.cs" />
+    <Compile Include="Classes\SDCard.cs" />
     <Compile Include="CustomControls\ForBase64.xaml.cs">
       <DependentUpon>ForBase64.xaml</DependentUpon>
     </Compile>
     <Compile Include="CustomControls\MainLogicGrid.xaml.cs">
       <DependentUpon>MainLogicGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LoadingDialog.xaml.cs">
+      <DependentUpon>LoadingDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

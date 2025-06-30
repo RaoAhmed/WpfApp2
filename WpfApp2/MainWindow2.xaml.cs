@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,11 +15,13 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using AutoFox;
 using ICSharpCode.AvalonEdit;
 using Microsoft.Win32;
 using WpfApp2.Classes;
 using WpfApp2.CustomControls;
+//using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace WpfApp2
 {
@@ -27,6 +30,7 @@ namespace WpfApp2
     /// </summary>
     public partial class MainWindow2 : Window
     {
+        private DispatcherTimer timer;
         private TextEditor codeEditor;
         //private ContentControl contentControl;
         private MainLogicGrid mainLogic = new MainLogicGrid();
@@ -38,9 +42,13 @@ namespace WpfApp2
             ContentControl.Content = mainLogic;
             mainLogic.main_logic_grid.Children.Clear();
             mainLogic.compileBtnClick += MainLogic_compileBtnClick;
-        }
+            mainLogic.uploadBtnClick += MainLogic_uploadBtnClick;
 
-        // PlaceHolder Code For TextBox.
+            timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(1); // Set interval
+            timer.Tick += Timer_Tick;                // Subscribe to Tick event
+            timer.Start();
+        }
         public static class TextBoxHelper
         {
             public static readonly DependencyProperty PlaceholderProperty =
@@ -86,11 +94,19 @@ namespace WpfApp2
                 }
             }
         }
-
-        private void MainLogic_compileBtnClick(object sender, EventArgs e)
+        
+        private void Timer_Tick(object sender, EventArgs e)
         {
+            ArduinoHandler arduinoHandler = new ArduinoHandler();
+            if (arduinoHandler.IsboardConnected())
+                status.Fill = Brushes.Green; // Update UI
+        }
 
-            string message="";
+        #region Upload Button
+        private void MainLogic_uploadBtnClick(object sender, EventArgs e)
+        {
+            Output_Window.Text = null;
+            string message = "";
             ArduinoHandler arduinoHandler = new ArduinoHandler();
             if (DisplayString.IsChecked == true)
             {
@@ -115,6 +131,95 @@ namespace WpfApp2
                 PlayVideo playVideo = new PlayVideo(textbox_URL.Text);
                 message = playVideo.PlayVideoSketch();
             }
+
+            else if (SD_Card.IsChecked == true)
+            {
+                SDCard sDCard = new SDCard();
+                message = sDCard.SDCardSketch();
+            }
+
+            else if (Data_Exfiltration.IsChecked == true)
+            {
+                DataExfiltration dataExfiltration = new DataExfiltration();
+                message = dataExfiltration.DataExfiltrationSketch();
+            }
+
+            else if (Editor.IsChecked == true)
+            {
+                Output_Window.Text = codeEditor.Text;
+                string Path = "test";
+                try
+                {
+                    if (!Directory.Exists(Path))
+                    {
+                        Directory.CreateDirectory(Path);
+                    }
+                    File.WriteAllText(@"test\test.ino", codeEditor.Text);
+                }
+                catch (Exception ex)
+                {
+                    Output_Window.Text = $"Failed SuccessFully 😁: {ex}";
+                }
+
+            }
+            message = arduinoHandler.CompileSketch();
+            Output_Window.Text = message;
+            message = arduinoHandler.UploadSketch();
+            Output_Window.Text = message;
+        }
+        #endregion
+        // PlaceHolder Code For TextBox.
+
+        #region Compile Button
+        private async void MainLogic_compileBtnClick(object sender, EventArgs e)
+        {
+            var loadingDialog = new LoadingDialog();
+            loadingDialog.Show();
+            
+            await Task.Run(() =>
+            {
+                Thread.Sleep(3000); // Simulate work
+            });
+
+            Output_Window.Text = null;
+            string message ="";
+            ArduinoHandler arduinoHandler = new ArduinoHandler();
+            if (DisplayString.IsChecked == true)
+            {
+                DisplayString displayString = new DisplayString(textbox_String.Text);
+                message = displayString.DisplayStringSketch();
+            }
+            else if (ReverseShell.IsChecked == true)
+            {
+                //Output_Window.Text = textbox_LHOST.Text + "\n\r" + textbox_LPORT.Text;
+                ReverseShell reverseShell = new ReverseShell(textbox_LHOST.Text, textbox_LPORT.Text);
+                message = reverseShell.ReverseShellSketch();
+            }
+            else if (AsciiDrawing.IsChecked == true)
+            {
+                //Output_Window.Text = textbox_Ascii.Text;
+                AsciiArt asciiArt = new AsciiArt(textbox_Ascii.Text);
+                message = asciiArt.AsciiArtSketch();
+            }
+            else if (Video.IsChecked == true)
+            {
+                //Output_Window.Text = textbox_URL.Text;
+                PlayVideo playVideo = new PlayVideo(textbox_URL.Text);
+                message = playVideo.PlayVideoSketch();
+            }
+
+            else if (SD_Card.IsChecked == true)
+            {
+                SDCard sDCard = new SDCard();
+                message = sDCard.SDCardSketch();
+            }
+
+            else if (Data_Exfiltration.IsChecked == true)
+            {
+                DataExfiltration dataExfiltration = new DataExfiltration();
+                message = dataExfiltration.DataExfiltrationSketch();
+            }
+
             else if (Editor.IsChecked == true)
             {
                 Output_Window.Text = codeEditor.Text;
@@ -136,6 +241,8 @@ namespace WpfApp2
             Output_Window.Text = message;
             message = arduinoHandler.CompileSketch();
             Output_Window.Text = message;
+
+            loadingDialog.Close();
             //switch (selectedIndex)
             //{
             //    case 0:
@@ -155,10 +262,11 @@ namespace WpfApp2
             //        message = playVideo.PlayVideoSketch();
             //        break;
             //}
-            message = arduinoHandler.CompileSketch();
+            //message = arduinoHandler.CompileSketch();
         }
+        #endregion
 
-
+        #region Scripts
         private void DisplayString_Checked(object sender, RoutedEventArgs e)
         {
             mainLogic.main_logic_grid.Children.Clear();
@@ -184,7 +292,7 @@ namespace WpfApp2
                 CornerRadius = new CornerRadius(10),
                 Height = 40,
                 Width = 200,
-                BorderBrush = new SolidColorBrush(Color.FromArgb(127,237, 222, 249)) ,
+                BorderBrush = new SolidColorBrush(Color.FromArgb(127,237, 222, 249)),
                 Background = new SolidColorBrush(Color.FromArgb(255,219, 189, 243)),
                 Padding = new Thickness(10)
             };
@@ -355,7 +463,7 @@ namespace WpfApp2
                 VerticalAlignment = VerticalAlignment.Stretch,
                 Background = Brushes.White,
                 BorderBrush = Brushes.Transparent,
-                Padding = new Thickness(5),
+                Padding = new Thickness(10),
                 BorderThickness = new Thickness(0),
                 VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
                 HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
@@ -420,47 +528,36 @@ namespace WpfApp2
             mainLogic.main_logic_grid.VerticalAlignment = VerticalAlignment.Center;
         }
 
-        //private void Compile_Click(object sender, RoutedEventArgs e)
-        //{
-        //    //int selectedIndex = ScriptsComboBox.SelectedIndex;
-        //    //string message;
-        //    int i = 0;
-        //    string[] data = new string[2];
-        //    StackPanel stackPanel = (StackPanel)mainLogic.main_logic_grid.Children[0];
-        //    foreach (StackPanel item in stackPanel.Children)
-        //    {
-        //        foreach (UIElement elem in item.Children)
-        //        {
-        //            if (elem is TextBox)
-        //            {
-        //                string value = ((TextBox)elem).Text;
-        //                data[i++] = value;
-        //                //MessageBox.Show
-        //            }
-        //        }
-        //    }
-        //}
+        #region SD_Card
+        private void SD_Card_Click(object sender, RoutedEventArgs e)
+        {
+            mainLogic.main_logic_grid.Children.Clear();
+            mainLogic.main_logic_grid.Children.Add(new Label
+            {
+                FontFamily = new FontFamily("Inter"),
+                Content = "Script is ready to be compiled",
+            });
+            mainLogic.main_logic_grid.HorizontalAlignment = HorizontalAlignment.Center;
+            mainLogic.main_logic_grid.VerticalAlignment = VerticalAlignment.Center;
+        }
+        #endregion
 
-        //private void Upload_Click(object sender, RoutedEventArgs e)
-        //{
-        //    //int selectedIndex = ScriptsComboBox.SelectedIndex;
-        //    //string message;
-        //    int i = 0;
-        //    string[] data = new string[2];
-        //    StackPanel stackPanel = (StackPanel)mainLogic.main_logic_grid.Children[0];
-        //    foreach (StackPanel item in stackPanel.Children)
-        //    {
-        //        foreach (UIElement elem in item.Children)
-        //        {
-        //            if (elem is TextBox)
-        //            {
-        //                string value = ((TextBox)elem).Text;
-        //                data[i++] = value;
-        //            }
-        //        }
+        #region Data Exfiltration
+        private void Data_Exfiltration_Click(object sender, RoutedEventArgs e)
+        {
+            mainLogic.main_logic_grid.Children.Clear();
+            mainLogic.main_logic_grid.Children.Add(new Label
+            {
+                FontFamily = new FontFamily("Inter"),
+                Content = "Script is ready to be compiled",
+            });
+            mainLogic.main_logic_grid.HorizontalAlignment = HorizontalAlignment.Center;
+            mainLogic.main_logic_grid.VerticalAlignment = VerticalAlignment.Center;
+        }
+        #endregion
 
-        //    }
-        //}
+        #endregion
+
         private void Expander_click_Collapsed(object sender, RoutedEventArgs e)
         {
             Expander expander = sender as Expander;
@@ -503,7 +600,7 @@ namespace WpfApp2
             ContentControl.Content = mainLogic;
             mainLogic.main_logic_grid.Children.Clear();
             dropdown2.Visibility = Visibility.Visible;
-            Scripts.IsChecked = false;
+            Scripts.IsChecked = Base64.IsChecked = false;
             DisplayString.IsChecked = ReverseShell.IsChecked = Video.IsChecked = AsciiDrawing.IsChecked = false;
 
             codeEditor = new TextEditor
@@ -589,6 +686,9 @@ namespace WpfApp2
         private void Base64_Checked(object sender, RoutedEventArgs e)
         {
             ContentControl.Content = base64;
+            Scripts.IsChecked = Editor.IsChecked = false;
+            DisplayString.IsChecked = ReverseShell.IsChecked = Video.IsChecked = AsciiDrawing.IsChecked = false;
+
             //dropdown3.Visibility = Visibility.Visible;
         }
 

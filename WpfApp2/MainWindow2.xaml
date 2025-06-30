@@ -26,12 +26,13 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="20*"/>
-                    <RowDefinition Height="80*"/>
+                    <RowDefinition Height="60*"/>
+                    <RowDefinition Height="20*"/>
                 </Grid.RowDefinitions>
 
                 <Image Grid.Row="0" Source="/Images/Auto Fox Logo.png" Width="100" />
-                <!--#region (Scripts) -->
                 <StackPanel Grid.Row="1">
+                    <!--#region (Scripts) -->
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*"/>
@@ -71,7 +72,7 @@
                                     <GradientStop Color="#DBBDF3" Offset="1.0" />
                                 </LinearGradientBrush>
                             </Border.Background>
-                            <StackPanel Background="Transparent">
+                            <StackPanel Background="Transparent" CanVerticallyScroll="True">
                                 <StackPanel.Resources>
                                     <Style TargetType="RadioButton">
                                         <Setter Property="Margin" Value="0,0,0,10" />
@@ -81,6 +82,8 @@
                                 <RadioButton x:Name="ReverseShell" Checked="ReverseShell_Checked" Style="{DynamicResource RadioButton1}" Content="Reverse Shell" GroupName="Scripts" />
                                 <RadioButton x:Name="AsciiDrawing" Checked="AsciiDrawing_Checked" Style="{DynamicResource RadioButton1}" Content="ASCII Drawing" GroupName="Scripts" />
                                 <RadioButton x:Name="Video" Click="Video_Click" Style="{DynamicResource RadioButton1}" Content="Video" GroupName="Scripts" />
+                                <RadioButton x:Name="SD_Card" Click="SD_Card_Click" Style="{DynamicResource RadioButton1}" Content="SD Card" GroupName="Scripts" />
+                                <RadioButton x:Name="Data_Exfiltration" Click="Data_Exfiltration_Click" Style="{DynamicResource RadioButton1}" Content="Data Exfiltration" GroupName="Scripts" />
                             </StackPanel>
                         </Border>
                     </Grid>
@@ -124,7 +127,7 @@
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="2*"/>
                         </Grid.RowDefinitions>
-                        <ToggleButton Grid.Row="0" Content="To Base64" Style="{DynamicResource ToggleButtonStyle1}" Background="#DBBDF3" Width="auto" Height="40" Margin="10,20,10,0" Checked="Base64_Checked" Unchecked="Base64_UnChecked"/>
+                        <ToggleButton Grid.Row="0" x:Name="Base64" Content="To Base64" Style="{DynamicResource ToggleButtonStyle1}" Background="#DBBDF3" Width="auto" Height="40" Margin="10,20,10,0" Checked="Base64_Checked" Unchecked="Base64_UnChecked"/>
                         <!--<Button Content="To Base64" Style="{DynamicResource ButtonStyle2}" Background="#DBBDF3" Width="auto" Height="40" Margin="10,20,10,0">
                             
                         </Button>-->
@@ -149,6 +152,17 @@
                     </Grid>
                     <!--#endregion (To Base64)-->
                 </StackPanel>
+                <Grid Grid.Row="2" VerticalAlignment="Bottom" Background="Transparent" Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Column="0" Content="Status" FontFamily="Inter" HorizontalAlignment="Center" />
+                    <Border Grid.Column="1" Width="12" Height="12" BorderBrush="Black" BorderThickness="0.5" CornerRadius="5" Padding="0.5">
+                        <Ellipse x:Name="status" Height="9" Width="9" Fill="Red" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                    </Border>
+                </Grid>
             </Grid>
         </Border>
         
@@ -185,11 +199,6 @@
                                    FontSize="14"
                                    Foreground="Black"
                                        Padding="20">
-                                What is Lorem Ipsum?
-                                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                            
-                                Where does it come from?
-                                Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
                             </TextBlock>
                         </ScrollViewer>
                     </Border>
