@@ -26,8 +26,8 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="20*"/>
-                    <RowDefinition Height="60*"/>
-                    <RowDefinition Height="20*"/>
+                    <RowDefinition Height="80*"/>
+                    <!--<RowDefinition Height="20*"/>-->
                 </Grid.RowDefinitions>
 
                 <Image Grid.Row="0" Source="/Images/Auto Fox Logo.png" Width="100" />
@@ -83,7 +83,8 @@
                                 <RadioButton x:Name="AsciiDrawing" Checked="AsciiDrawing_Checked" Style="{DynamicResource RadioButton1}" Content="ASCII Drawing" GroupName="Scripts" />
                                 <RadioButton x:Name="Video" Click="Video_Click" Style="{DynamicResource RadioButton1}" Content="Video" GroupName="Scripts" />
                                 <RadioButton x:Name="SD_Card" Click="SD_Card_Click" Style="{DynamicResource RadioButton1}" Content="SD Card" GroupName="Scripts" />
-                                <RadioButton x:Name="Data_Exfiltration" Click="Data_Exfiltration_Click" Style="{DynamicResource RadioButton1}" Content="Data Exfiltration" GroupName="Scripts" />
+                                <!--<RadioButton x:Name="Handler" Click="SD_Card_Click" Style="{DynamicResource RadioButton1}" Content="SD Card" GroupName="Scripts" />-->
+                                <!--<RadioButton x:Name="Data_Exfiltration" Click="Data_Exfiltration_Click" Style="{DynamicResource RadioButton1}" Content="Data Exfiltration" GroupName="Scripts" />-->
                             </StackPanel>
                         </Border>
                     </Grid>
@@ -152,7 +153,7 @@
                     </Grid>
                     <!--#endregion (To Base64)-->
                 </StackPanel>
-                <Grid Grid.Row="2" VerticalAlignment="Bottom" Background="Transparent" Margin="10">
+                <!--<Grid Grid.Row="2" VerticalAlignment="Bottom" Background="Transparent" Margin="10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
@@ -162,7 +163,7 @@
                     <Border Grid.Column="1" Width="12" Height="12" BorderBrush="Black" BorderThickness="0.5" CornerRadius="5" Padding="0.5">
                         <Ellipse x:Name="status" Height="9" Width="9" Fill="Red" VerticalAlignment="Center" HorizontalAlignment="Center" />
                     </Border>
-                </Grid>
+                </Grid>-->
             </Grid>
         </Border>
         

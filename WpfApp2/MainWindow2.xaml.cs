@@ -43,11 +43,6 @@ namespace WpfApp2
             mainLogic.main_logic_grid.Children.Clear();
             mainLogic.compileBtnClick += MainLogic_compileBtnClick;
             mainLogic.uploadBtnClick += MainLogic_uploadBtnClick;
-
-            timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(1); // Set interval
-            timer.Tick += Timer_Tick;                // Subscribe to Tick event
-            timer.Start();
         }
         public static class TextBoxHelper
         {
@@ -95,17 +90,20 @@ namespace WpfApp2
             }
         }
         
-        private void Timer_Tick(object sender, EventArgs e)
-        {
-            ArduinoHandler arduinoHandler = new ArduinoHandler();
-            if (arduinoHandler.IsboardConnected())
-                status.Fill = Brushes.Green; // Update UI
-        }
+        
 
         #region Upload Button
-        private void MainLogic_uploadBtnClick(object sender, EventArgs e)
+        private async void MainLogic_uploadBtnClick(object sender, EventArgs e)
         {
-            Output_Window.Text = null;
+            var loadingDialog = new LoadingDialog();
+            loadingDialog.Show();
+
+            await Task.Run(() =>
+            {
+                Thread.Sleep(3000); // Simulate work
+            });
+
+            Output_Window.Text = "";
             string message = "";
             ArduinoHandler arduinoHandler = new ArduinoHandler();
             if (DisplayString.IsChecked == true)
@@ -138,12 +136,6 @@ namespace WpfApp2
                 message = sDCard.SDCardSketch();
             }
 
-            else if (Data_Exfiltration.IsChecked == true)
-            {
-                DataExfiltration dataExfiltration = new DataExfiltration();
-                message = dataExfiltration.DataExfiltrationSketch();
-            }
-
             else if (Editor.IsChecked == true)
             {
                 Output_Window.Text = codeEditor.Text;
@@ -166,6 +158,7 @@ namespace WpfApp2
             Output_Window.Text = message;
             message = arduinoHandler.UploadSketch();
             Output_Window.Text = message;
+            loadingDialog.Close();
         }
         #endregion
         // PlaceHolder Code For TextBox.
@@ -181,7 +174,7 @@ namespace WpfApp2
                 Thread.Sleep(3000); // Simulate work
             });
 
-            Output_Window.Text = null;
+            Output_Window.Text = "";
             string message ="";
             ArduinoHandler arduinoHandler = new ArduinoHandler();
             if (DisplayString.IsChecked == true)
@@ -212,12 +205,6 @@ namespace WpfApp2
             {
                 SDCard sDCard = new SDCard();
                 message = sDCard.SDCardSketch();
-            }
-
-            else if (Data_Exfiltration.IsChecked == true)
-            {
-                DataExfiltration dataExfiltration = new DataExfiltration();
-                message = dataExfiltration.DataExfiltrationSketch();
             }
 
             else if (Editor.IsChecked == true)
